@@ -1,0 +1,33 @@
+[
+	{
+	"createStore":{
+	"name": "Toukhy",
+	"type": "Challenge test",
+	"address": "Masr El-Gdeeda",
+	"address2": "",
+	"city": "Cairo",
+	"state": "EG",
+	"zip": "112812",
+	"lat": 91.2254,
+	"lng": -89.3325,
+	"hours": "Sat: 9-11; Sun: 9-11; Mon: 8-12; Tue: 7-10; Wedns: 12-10; Thurs: 10-8; Fri: 1-9;",
+	"services": {}
+}
+	},
+	{
+	"createStore":{
+	"name": "Toukhy2",
+	"type": "Challenge test2",
+	"address": "Masr El-Gdeeda2",
+	"address2": "",
+	"city": "Cairo2",
+	"state": "EG2",
+	"zip": "1128123",
+	"lat": 91.2254,
+	"lng": -89.3325,
+	"hours": "Sat: 9-11; Sun: 9-11; Mon: 8-12; Tue: 7-10; Wedns: 12-10; Thurs: 10-8; Fri: 1-9;",
+	"services": {}
+}
+	}
+	
+]

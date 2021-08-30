@@ -1,0 +1,561 @@
+{
+	"info": {
+		"_postman_id": "2753d258-5bed-4298-9637-af3d47b0284a",
+		"name": "BestBuy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products API",
+			"item": [
+				{
+					"name": "All Products",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"var total = pm.globals.set(\"total\",code.total);\r",
+									"var firstProd = pm.globals.set(\"firstProd\", code.data[0].id);\r",
+									"pm.globals.set(\"oldTotal\", pm.variables.get(\"total\"));\r",
+									"\r",
+									"pm.test(\"GET All Products Success\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{firstProd}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{firstProd}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Products after delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var assert = require('assert');\r",
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"totalAfterDelete\", code.total);\r",
+									"var oldTotal = pm.globals.get(\"oldTotal\");\r",
+									"pm.test(\"Total number of products changed from: \" + oldTotal +\" To: \" +pm.globals.get(\"totalAfterDelete\"), function () {\r",
+									"    assert(oldTotal > pm.globals.get(\"totalAfterDelete\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"\r",
+									"pm.globals.set(\"id\",code.id);\r",
+									"var id = pm.globals.get(\"id\");\r",
+									"pm.test(\"Product Created With ID: \" + id , function () {\r",
+									"\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Toukhy PC\",\r\n    \"type\": \"Electronic\",\r\n    \"price\": 21000,\r\n    \"shipping\": 0,\r\n    \"upc\": \"21091995\",\r\n    \"description\": \"A gaming PC\",\r\n    \"manufacturer\": \"Souq Al-Asr\",\r\n    \"model\": \"01211\",\r\n    \"url\": \"https://www.linkedin.com/in/toukhy\",\r\n    \"image\": \"https://www.google.com/search?q=ayman+el-toukhy&sxsrf=AOaemvInPrQkJ-LUaJobZFqxkjTw5lVzGA:1630049176911&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiCxZ-x1tDyAhUKtRoKHTvgD2gQ_AUoAXoECAEQAw&biw=1920&bih=937#imgrc=Oee_DQi7R3nIKM\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product with ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"productName\", code.name);\r",
+									"\r",
+									"pm.test(\"Product Found with ID: \" + pm.globals.get(\"id\") , function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Products After adding a new Product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var assert = require('assert');\r",
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"totalAfterAdding\", code.total);\r",
+									"var totalAfterDelete = pm.globals.get(\"totalAfterDelete\");\r",
+									"pm.test(\"Total number of products changed from: \" + totalAfterDelete +\" To: \" +pm.globals.get(\"totalAfterAdding\"), function () {\r",
+									"    assert(totalAfterDelete < pm.globals.get(\"totalAfterAdding\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"var assert = require('assert');\r",
+									"pm.globals.set(\"newName\", code.name);\r",
+									"\r",
+									"var oldName = pm.globals.get(\"productName\");\r",
+									"\r",
+									"pm.test(\"Product Name Changed from: \" + oldName + \" To: \" + pm.globals.get(\"newName\") , function () {\r",
+									"assert(oldName !== pm.globals.get(\"newName\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Toukhy PC\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/{{id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stores API",
+			"item": [
+				{
+					"name": "All stores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"oldTotalStores\",code.total);\r",
+									"pm.globals.set(\"firstStore\", code.data[0].id);\r",
+									"pm.test(\"GET All Stores Success\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Stores From File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"if(code.name == \"Toukhy\"){\r",
+									"    pm.globals.set(\"storeId1\", code.id);\r",
+									"}\r",
+									"else if(code.name == \"Toukhy2\"){\r",
+									"    pm.globals.set(\"storeId2\", code.id);\r",
+									"    postman.setNextRequest('Delete Store');\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"createStore\", JSON.stringify(pm.iterationData.get('createStore')));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{createStore}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/stores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Stores After adding New Store",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var assert = require('assert');\r",
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"totalStoresAfterAdding\", code.total);\r",
+									"var totalAfterDelete = pm.globals.get(\"oldTotalStores\");\r",
+									"pm.test(\"Total number of stores changed from: \" + totalAfterDelete +\" To: \" +pm.globals.get(\"totalStoresAfterAdding\"), function () {\r",
+									"    assert(totalAfterDelete < pm.globals.get(\"totalStoresAfterAdding\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store with ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"pm.globals.set(\"storeName\", code.name);\r",
+									"\r",
+									"pm.test(\"Store Found\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stores/{{storeId1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores",
+								"{{storeId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let code = pm.response.json();\r",
+									"var assert = require('assert');\r",
+									"pm.globals.set(\"newName\", code.name);\r",
+									"\r",
+									"var oldName = pm.globals.get(\"storeName\");\r",
+									"\r",
+									"pm.test(\"Store Name Changed from: \" + oldName + \" To: \" + pm.globals.get(\"newName\") , function () {\r",
+									"assert(oldName !== pm.globals.get(\"newName\"));\r",
+									"});\r",
+									"postman.setNextRequest(null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"NewToukhyShop\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/stores/{{storeId1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores",
+								"{{storeId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Store Deleted successfully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/stores/{{storeId2}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"stores",
+								"{{storeId2}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3030"
+		}
+	]
+}
